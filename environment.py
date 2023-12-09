@@ -3,6 +3,7 @@ import numpy as np
 from utils import Config
 from food import Food
 from blob import BlueBlob, RedBlob
+from data_analysis import DataAnalysis
 
 config = Config()
 class Environment:
@@ -14,6 +15,9 @@ class Environment:
         BlueBlobs = [BlueBlob(self.config.x_boundary, self.config.y_boundary) for i in range(10)]
         RedBlobs = [RedBlob(self.config.x_boundary, self.config.y_boundary) for i in range(0)]
         self.blobs = BlueBlobs + RedBlobs
+        
+        # Initialize the data analysis
+        self.data_analysis = DataAnalysis()
         
         # Initialize Pygame
         pygame.init()
@@ -42,14 +46,18 @@ class Environment:
             # Add new food
             if len(self.foods) < config.food_amount:
                 self.foods.append(Food(self.config.x_boundary, self.config.y_boundary))
+                
+            # Update Data Analysis
+            self.data_analysis.collect_data(self.blobs)
 
             # Update the environment and entities
             update_function(self.blobs, self.foods, self)
 
             # Draw everything
-            self.screen.fill((255, 255, 255))
-            draw_function(self.blobs, self.foods, self.screen)
-            self.draw_status()
+            self.screen.fill((255, 255, 255))  # Clear the screen
+            draw_function(self.blobs, self.foods, self.screen)  # Draw blobs and foods
+            self.data_analysis.draw_graph(self.screen)  # Draw the data graph
+            self.draw_status()  # Draw status information
 
             # Update the display
             pygame.display.flip()
