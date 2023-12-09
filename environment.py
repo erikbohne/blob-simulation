@@ -1,10 +1,18 @@
 import pygame
 from utils import Config
+from food import Food
+from blob import BlueBlob, RedBlob
 
 class Environment:
     def __init__(self):
         self.config = Config()
+        self.foods = [Food(self.config.x_boundary, self.config.y_boundary) for _ in range(10)]
 
+        # Initialize the blobs
+        BlueBlobs = [BlueBlob(self.config.x_boundary, self.config.y_boundary) for i in range(10)]
+        RedBlobs = [RedBlob(self.config.x_boundary, self.config.y_boundary) for i in range(10)]
+        self.blobs = BlueBlobs + RedBlobs
+        
         # Initialize Pygame
         pygame.init()
 
@@ -21,13 +29,17 @@ class Environment:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    
+            # Add new food
+            if len(self.foods) < 20:
+                self.foods.append(Food(self.config.x_boundary, self.config.y_boundary))
 
             # Update the environment and entities
-            update_function()
+            update_function(self.blobs, self.foods)
 
             # Draw everything
             self.screen.fill((255, 255, 255))  # Clear the screen with a white background
-            draw_function(self.screen)
+            draw_function(self.blobs, self.foods, self.screen)
 
             # Update the display
             pygame.display.flip()

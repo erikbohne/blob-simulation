@@ -1,24 +1,19 @@
-from blob import BlueBlob, RedBlob
 import pygame
 
-def update(blobs):
+def update(blobs, foods):
     # Update each blob
     for blob in blobs:
-        blob.move()
+        blob.move(foods)
 
-def draw(blobs, screen):
-    # Clear the screen (for Pygame, fill it with a background color)
-    screen.fill((255, 255, 255))  # White background
+def draw(blobs, foods, screen):
+    screen.fill((255, 255, 255))  # Clear the screen with a white background
 
-    # Draw each blob
+    # Use the blob's draw method
     for blob in blobs:
-        if isinstance(blob, BlueBlob):
-            color = (0, 0, 255)  # Blue for BlueBlob
-        elif isinstance(blob, RedBlob):
-            color = (255, 0, 0)  # Red for RedBlob
+        blob.draw(screen)
 
-        # Draw the blob as a circle (for Pygame)
-        pygame.draw.circle(screen, color, (blob.x, blob.y), blob.size)
-
-    # Update the display to show the new frame (for Pygame)
+    # Use the food's draw method
+    for food in foods:
+        food.draw(screen)
+    
     pygame.display.flip()
