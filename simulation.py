@@ -1,9 +1,11 @@
 import pygame
 
-def update(blobs, foods):
+def update(blobs, foods, env):
     # Update each blob
     for blob in blobs:
         blob.move(foods)
+        blob.reproduce(env)
+        blob.survive(env)
 
 def draw(blobs, foods, screen):
     screen.fill((255, 255, 255))  # Clear the screen with a white background
