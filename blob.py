@@ -21,7 +21,7 @@ class BlueBlob:
         self.speed = max(0.5, min(self.speed, 2.0))  # Ensure speed stays within reasonable bounds
 
         self.energy = energy if energy is not None else 100 + (self.size - 4.0) * 25
-        self.energy_consumption = self.speed * 0.5  # Faster blobs consume more energy
+        self.energy_consumption = self.speed * 0.1  # Faster blobs consume more energy
 
     def move(self, foods):
         if not foods:
@@ -40,12 +40,12 @@ class BlueBlob:
 
     def reproduce(self, env):
         if self.energy > config.reproduction_threshold:
-            # Variation in size for offspring
-            offspring_size = self.size + random.uniform(-0.5, 0.5)
-            offspring_size = max(4, min(offspring_size, 8))
-
             # Speed adjusted based on size
-            offspring_speed = 2.0 - (offspring_size - 4.0) * 0.25
+            offspring_speed = self.speed + random.uniform(-0.25, 0.25)
+            
+            # Variation in size for offspring
+            offspring_size = offspring_speed / 0.5 + 4.0 + random.uniform(-1.0, 1.0)
+            offspring_size = max(4, min(offspring_size, 8))
 
             # New energy for offspring with some variation
             offspring_energy = self.energy / 2

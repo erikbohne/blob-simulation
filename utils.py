@@ -13,3 +13,7 @@ class Config:
         self.reproduction_threshold = 200
         self.food_energy = 50
         self.food_amount = 200
+        
+        # Starting blobs
+        self.starting_blue_blobs = 10
+        self.starting_red_blobs = 0

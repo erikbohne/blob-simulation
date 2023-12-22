@@ -12,8 +12,8 @@ class Environment:
         self.foods = [Food(self.config.x_boundary, self.config.y_boundary) for _ in range(10)]
 
         # Initialize the blobs
-        BlueBlobs = [BlueBlob(self.config.x_boundary, self.config.y_boundary) for i in range(10)]
-        RedBlobs = [RedBlob(self.config.x_boundary, self.config.y_boundary) for i in range(0)]
+        BlueBlobs = [BlueBlob(self.config.x_boundary, self.config.y_boundary) for i in range(config.starting_blue_blobs)]
+        RedBlobs = [RedBlob(self.config.x_boundary, self.config.y_boundary) for i in range(config.starting_red_blobs)]
         self.blobs = BlueBlobs + RedBlobs
         
         # Initialize the data analysis
@@ -33,8 +33,39 @@ class Environment:
         font = pygame.font.SysFont(None, 24)  # You can choose a different font or size
         blue_count = sum(isinstance(blob, BlueBlob) for blob in self.blobs)
         red_count = sum(isinstance(blob, RedBlob) for blob in self.blobs)
+        
+        # Calculate average speed
+        blue_speeds = [blob.speed for blob in self.blobs if isinstance(blob, BlueBlob)]
+        red_speeds = [blob.speed for blob in self.blobs if isinstance(blob, RedBlob)]
+        average_blue_speed = np.mean(blue_speeds) if blue_speeds else 0
+        average_red_speed = np.mean(red_speeds) if red_speeds else 0
+        
+        # Calculate average size
+        blue_sizes = [blob.size for blob in self.blobs if isinstance(blob, BlueBlob)]
+        red_sizes = [blob.size for blob in self.blobs if isinstance(blob, RedBlob)]
+        average_blue_size = np.mean(blue_sizes) if blue_sizes else 0
+        average_red_size = np.mean(red_sizes) if red_sizes else 0
+        
+        # Calculate total energy
+        total_energy = sum(blob.energy for blob in self.blobs)
+        
         text = font.render(f'Blue Blobs: {blue_count}, Red Blobs: {red_count}', True, (0, 0, 0))
         self.screen.blit(text, (10, 10))  # Position the text on the screen
+        
+        text = font.render(f'Average Blue Speed: {average_blue_speed:.2f}', True, (0, 0, 0))
+        self.screen.blit(text, (10, 40))
+        
+        text = font.render(f'Average Red Speed: {average_red_speed:.2f}', True, (0, 0, 0))
+        self.screen.blit(text, (10, 70))
+        
+        text = font.render(f'Average Blue Size: {average_blue_size:.2f}', True, (0, 0, 0))
+        self.screen.blit(text, (10, 100))
+        
+        text = font.render(f'Average Red Size: {average_red_size:.2f}', True, (0, 0, 0))
+        self.screen.blit(text, (10, 130))
+        
+        text = font.render(f'Total Energy: {total_energy}', True, (0, 0, 0))
+        self.screen.blit(text, (10, 160))
 
     def run(self, update_function, draw_function):
         running = True
